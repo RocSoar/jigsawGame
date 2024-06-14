@@ -7,5 +7,6 @@ public class App {
         new GameJFrame();
         // new LoginJFrame();
         // new RegisterJFrame();
+        System.out.println(-1 % 4);
     }
 }
