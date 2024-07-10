@@ -1,10 +1,17 @@
 package com.roc.ui;
 
+import com.roc.data.User;
+import com.roc.utils.IOUtils;
+
 import javax.swing.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class RegisterJFrame extends JFrame implements MouseListener {
+    List<User> userList = new ArrayList<>();
     //提升三个输入框的变量的作用范围，让这三个变量可以在本类中所有方法里面可以使用。
     JTextField username = new JTextField();
     JTextField password = new JTextField();
@@ -14,15 +21,49 @@ public class RegisterJFrame extends JFrame implements MouseListener {
     JButton submit = new JButton();
     JButton reset = new JButton();
 
-    public RegisterJFrame() {
+    public RegisterJFrame() throws IOException {
+        readUserInfo();
         initFrame();
         initView();
         setVisible(true);
     }
 
+    public void readUserInfo() throws IOException {
+        IOUtils.readLines("userinfo.txt").forEach(line -> userList.add(new User(line)));
+    }
+
     @Override
     public void mouseClicked(MouseEvent e) {
-
+        Object s = e.getSource();
+        if (s == submit) {
+            if (username.getText().isBlank() || password.getText().isBlank() || rePassword.getText().isBlank()) {
+                showDialog("用户名或密码不能为空！");
+                return;
+            }
+            if (!password.getText().equals(rePassword.getText())) {
+                showDialog("两次密码输入不一致！");
+                return;
+            }
+            if (!username.getText().matches("\\w{4,16}")) {
+                showDialog("用户名不符合规则！");
+                return;
+            }
+            if (!password.getText().matches("\\S*(?=\\S{6,})(?=\\S*\\d)(?=\\S*[A-Z])(?=\\S*[a-z])(?=\\S*[!@#$%^&*?])\\S*")) {
+                showDialog("""
+                        密码不符合规则！
+                        仅包含非空白字符。
+                        长度至少为 6 个非空白字符。
+                        包含至少一个数字。
+                        包含至少一个大写字母。
+                        包含至少一个小写字母。
+                        包含至少一个特殊字符""");
+                return;
+            }
+        } else if (s == reset) {
+            username.setText("");
+            password.setText("");
+            rePassword.setText("");
+        }
     }
 
     @Override

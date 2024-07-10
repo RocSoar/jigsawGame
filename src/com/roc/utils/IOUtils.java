@@ -13,7 +13,7 @@ public class IOUtils {
         String line;
         while ((line = br.readLine()) != null)
             lines.add(line);
-
+        br.close();
         return lines;
     }
 }

@@ -12,6 +12,12 @@ public class User {
         this.password = password;
     }
 
+    public User(String line) {
+        String[] ss = line.split("[=&]");
+        name = ss[1];
+        password = ss[3];
+    }
+
     public String getName() {
         return name;
     }
@@ -26,5 +32,13 @@ public class User {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "name='" + name + '\'' +
+                ", password='" + password + '\'' +
+                '}';
     }
 }

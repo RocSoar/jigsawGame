@@ -22,7 +22,9 @@ public class Test {
         // String regex =
         // "[1-9]\\d{5}(18|19|20)\\d{2}(0[1-9]|1[012])(0[1-9]|[12]\\d|3[01])\\d{3}[\\dxX]";
 
-        System.out.println(ZoneId.getAvailableZoneIds());
-
+//        System.out.println(ZoneId.getAvailableZoneIds());
+        String s = "username=soar&password=5678";
+        String[] ss = s.split("[=&]");
+        System.out.println(Arrays.toString(ss));
     }
 }

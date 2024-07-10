@@ -2,11 +2,13 @@ package com.roc.ui;
 
 import com.roc.data.User;
 import com.roc.utils.CodeUtils;
+import com.roc.utils.IOUtils;
 
 import javax.swing.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,13 +25,18 @@ public class LoginJFrame extends JFrame implements MouseListener {
 
     JDialog jDialog = new JDialog();
 
-    public LoginJFrame() {
+    public LoginJFrame() throws IOException {
+        readUserInfo();
 
         initJFrame();
 
         initView();
 
         setVisible(true);
+    }
+
+    public void readUserInfo() throws IOException {
+        IOUtils.readLines("userinfo.txt").forEach(line -> userList.add(new User(line)));
     }
 
     private void initJFrame() {
@@ -46,21 +53,21 @@ public class LoginJFrame extends JFrame implements MouseListener {
     }
 
     private void initView() {
-        JLabel usernameText = new JLabel(new ImageIcon("./image/login/用户名.png"));
+        JLabel usernameText = new JLabel(new ImageIcon("image/login/用户名.png"));
         usernameText.setBounds(116, 135, 47, 17);
         getContentPane().add(usernameText);
 
         username.setBounds(195, 134, 200, 30);
         getContentPane().add(username);
 
-        JLabel passwordText = new JLabel(new ImageIcon("./image/login/密码.png"));
+        JLabel passwordText = new JLabel(new ImageIcon("image/login/密码.png"));
         passwordText.setBounds(130, 195, 32, 16);
         getContentPane().add(passwordText);
 
         password.setBounds(195, 195, 200, 30);
         getContentPane().add(password);
 
-        JLabel codeText = new JLabel(new ImageIcon("./image/login/验证码.png"));
+        JLabel codeText = new JLabel(new ImageIcon("image/login/验证码.png"));
         codeText.setBounds(133, 256, 50, 30);
         getContentPane().add(codeText);
 
@@ -72,20 +79,20 @@ public class LoginJFrame extends JFrame implements MouseListener {
         getContentPane().add(rightCode);
 
         login.setBounds(123, 310, 128, 47);
-        login.setIcon(new ImageIcon("./image/login/登录按钮.png"));
+        login.setIcon(new ImageIcon("image/login/登录按钮.png"));
 
         login.setBorderPainted(false); //去除按钮默认边框
         login.setContentAreaFilled(false); //去除按钮默认背景
         getContentPane().add(login);
 
         register.setBounds(256, 310, 128, 47);
-        register.setIcon(new ImageIcon("./image/login/注册按钮.png"));
+        register.setIcon(new ImageIcon("image/login/注册按钮.png"));
 
         register.setBorderPainted(false); //去除按钮默认边框
         register.setContentAreaFilled(false); //去除按钮默认背景
         getContentPane().add(register);
 
-        JLabel background = new JLabel(new ImageIcon("./image/login/background.png"));
+        JLabel background = new JLabel(new ImageIcon("image/login/background.png"));
         background.setBounds(0, 0, 470, 390);
         getContentPane().add(background);
 
@@ -115,23 +122,8 @@ public class LoginJFrame extends JFrame implements MouseListener {
 
     @Override
     public void mouseClicked(MouseEvent e) {
-    }
-
-    @Override
-    public void mousePressed(MouseEvent e) {
         Object s = e.getSource();
         if (s == login) {
-            login.setIcon(new ImageIcon("./image/login/登录按下.png"));
-        } else if (s == register) {
-            register.setIcon(new ImageIcon("./image/login/注册按下.png"));
-        }
-    }
-
-    @Override
-    public void mouseReleased(MouseEvent e) {
-        Object s = e.getSource();
-        if (s == login) {
-            login.setIcon(new ImageIcon("./image/login/登录按钮.png"));
             String un = username.getText();
             String pwd = new String(password.getPassword());
             String c = code.getText();
@@ -159,10 +151,31 @@ public class LoginJFrame extends JFrame implements MouseListener {
             setVisible(false);
             new GameJFrame();
         } else if (s == register) {
-            register.setIcon(new ImageIcon("./image/login/注册按钮.png"));
-//            TODO:
-            System.out.println("注册逻辑实现");
+            try {
+                new RegisterJFrame();
+                setVisible(false);
+            } catch (IOException ex) {
+                throw new RuntimeException(ex);
+            }
         }
+    }
+
+    @Override
+    public void mousePressed(MouseEvent e) {
+        Object s = e.getSource();
+        if (s == login)
+            login.setIcon(new ImageIcon("image/login/登录按下.png"));
+        else if (s == register)
+            register.setIcon(new ImageIcon("image/login/注册按下.png"));
+    }
+
+    @Override
+    public void mouseReleased(MouseEvent e) {
+        Object s = e.getSource();
+        if (s == login)
+            login.setIcon(new ImageIcon("image/login/登录按钮.png"));
+        else if (s == register)
+            register.setIcon(new ImageIcon("image/login/注册按钮.png"));
     }
 
     @Override
