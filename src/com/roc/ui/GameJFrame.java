@@ -20,12 +20,7 @@ public class GameJFrame extends JFrame implements KeyListener, ActionListener {
 
     String path = "./image/animal/animal3/";
 
-    int[][] win = {
-            {1, 2, 3, 4},
-            {5, 6, 7, 8},
-            {9, 10, 11, 12},
-            {13, 14, 15, 16},
-    };
+    int[][] win = { { 1, 2, 3, 4 }, { 5, 6, 7, 8 }, { 9, 10, 11, 12 }, { 13, 14, 15, 16 }, };
     JMenuItem replayItem = new JMenuItem("重新游戏");
     JMenuItem reLoginItem = new JMenuItem("重新登录");
     JMenuItem closeItem = new JMenuItem("关闭游戏");
@@ -48,7 +43,7 @@ public class GameJFrame extends JFrame implements KeyListener, ActionListener {
     }
 
     private void initData() {
-        int[] tempArr = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15};
+        int[] tempArr = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15 };
         ArrayUtils.disorderArrayInPlace(tempArr);
         for (int i = 0; i < tempArr.length; i++) {
             if (tempArr[i] == 0) {
@@ -141,7 +136,7 @@ public class GameJFrame extends JFrame implements KeyListener, ActionListener {
     @Override
     public void keyPressed(KeyEvent e) {
         int code = e.getKeyCode();
-        if (code == 65) { //A键
+        if (code == 65) { // A键
             getContentPane().removeAll();
             JLabel all = new JLabel(new ImageIcon(path + "all.jpg"));
             all.setBounds(90, 134, 420, 420);
@@ -162,47 +157,42 @@ public class GameJFrame extends JFrame implements KeyListener, ActionListener {
             return;
         }
         switch (code) {
-            case 37 -> {  //左箭头
-                if (y == 3)
-                    return;
-                data[x][y] = data[x][y + 1];
-                data[x][y + 1] = 0;
-                y = y + 1;
-                step++;
-            }
-            case 38 -> { //上箭头
-                if (x == 3)
-                    return;
-                data[x][y] = data[x + 1][y];
-                data[x + 1][y] = 0;
-                x = x + 1;
-                step++;
-            }
-            case 39 -> { //右箭头
-                if (y == 0)
-                    return;
-                data[x][y] = data[x][y - 1];
-                data[x][y - 1] = 0;
-                y = y - 1;
-                step++;
-            }
-            case 40 -> {  //下箭头
-                if (x == 0)
-                    return;
-                data[x][y] = data[x - 1][y];
-                data[x - 1][y] = 0;
-                x = x - 1;
-                step++;
-            }
-            case 87 -> {  //W键
-                data = new int[][]{
-                        {1, 2, 3, 4},
-                        {5, 6, 7, 8},
-                        {9, 10, 11, 12},
-                        {13, 14, 15, 16},
-                };
-                succeed = true;
-            }
+        case 37 -> { // 左箭头
+            if (y == 3)
+                return;
+            data[x][y] = data[x][y + 1];
+            data[x][y + 1] = 0;
+            y = y + 1;
+            step++;
+        }
+        case 38 -> { // 上箭头
+            if (x == 3)
+                return;
+            data[x][y] = data[x + 1][y];
+            data[x + 1][y] = 0;
+            x = x + 1;
+            step++;
+        }
+        case 39 -> { // 右箭头
+            if (y == 0)
+                return;
+            data[x][y] = data[x][y - 1];
+            data[x][y - 1] = 0;
+            y = y - 1;
+            step++;
+        }
+        case 40 -> { // 下箭头
+            if (x == 0)
+                return;
+            data[x][y] = data[x - 1][y];
+            data[x - 1][y] = 0;
+            x = x - 1;
+            step++;
+        }
+        case 87 -> { // W键
+            data = new int[][] { { 1, 2, 3, 4 }, { 5, 6, 7, 8 }, { 9, 10, 11, 12 }, { 13, 14, 15, 16 } };
+            succeed = true;
+        }
         }
         initImage();
     }
@@ -241,7 +231,7 @@ public class GameJFrame extends JFrame implements KeyListener, ActionListener {
             jDialog.setSize(344, 344);
             jDialog.setAlwaysOnTop(true);
             jDialog.setLocationRelativeTo(null);
-//            弹窗不关闭则无法操作下面的界面
+            // 弹窗不关闭则无法操作下面的界面
             jDialog.setModal(true);
             jDialog.setVisible(true);
         } else if (source == person) {

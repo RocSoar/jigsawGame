@@ -4,20 +4,14 @@ import com.roc.data.User;
 import com.roc.utils.CodeUtils;
 
 import javax.swing.*;
-import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
+import java.util.List;
 
 public class LoginJFrame extends JFrame implements MouseListener {
-
-    static ArrayList<User> list = new ArrayList<>();
-
-    static {
-        list.add(new User("rocSoar", "1234"));
-        list.add(new User("gpx", "5678"));
-    }
+    List<User> userList = new ArrayList<>();
 
     JTextField username = new JTextField();
     JPasswordField password = new JPasswordField();
@@ -182,10 +176,13 @@ public class LoginJFrame extends JFrame implements MouseListener {
     }
 
     private boolean contains(String username) {
-        return list.stream().anyMatch(u -> u.getName().equals(username));
+        return userList.stream().anyMatch(u -> u.getName().equals(username));
     }
 
     private User queryOne(String username) {
-        return list.stream().filter(u -> u.getName().equals(username)).findFirst().orElse(null);
+        return userList.stream()
+                .filter(u -> u.getName().equals(username))
+                .findFirst()
+                .orElse(null);
     }
 }
