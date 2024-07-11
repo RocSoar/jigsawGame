@@ -9,10 +9,14 @@ import com.roc.utils.IOUtils;
 
 import java.awt.event.*;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.Properties;
 import java.util.Random;
 
 public class GameJFrame extends JFrame implements KeyListener, ActionListener {
+    Properties prop = new Properties();
     String username;
     File saveRoot = new File("save");
     File userSavePath;
@@ -61,8 +65,10 @@ public class GameJFrame extends JFrame implements KeyListener, ActionListener {
     JMenuItem loadItem3 = new JMenuItem("存档3(空)");
     JMenuItem loadItem4 = new JMenuItem("存档4(空)");
 
-    public GameJFrame(String username) {
+    public GameJFrame(String username) throws IOException {
         this.username = username;
+
+        loadProperties();
 
         initJFrame();
 
@@ -183,6 +189,12 @@ public class GameJFrame extends JFrame implements KeyListener, ActionListener {
 
         setLayout(null);
         addKeyListener(this);
+    }
+
+    public void loadProperties() throws IOException {
+        FileInputStream fis = new FileInputStream("game.properties");
+        prop.load(fis);
+        fis.close();
     }
 
     public void restoreData() {
@@ -359,8 +371,13 @@ public class GameJFrame extends JFrame implements KeyListener, ActionListener {
         } else if (source == closeItem) {
             System.exit(0);
         } else if (source == accountItem) {
+            try {
+                loadProperties();
+            } catch (IOException ex) {
+                throw new RuntimeException(ex);
+            }
             JDialog jDialog = new JDialog();
-            JLabel jLabel = new JLabel(new ImageIcon("image/about.png"));
+            JLabel jLabel = new JLabel(new ImageIcon(prop.getProperty("aboutImage")));
             jLabel.setBounds(0, 0, 258, 258);
             jDialog.getContentPane().add(jLabel);
             jDialog.setSize(344, 344);

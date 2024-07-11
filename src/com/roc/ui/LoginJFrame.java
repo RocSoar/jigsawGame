@@ -167,7 +167,11 @@ public class LoginJFrame extends JFrame implements MouseListener {
                 throw new RuntimeException(ex);
             }
             setVisible(false);
-            new GameJFrame(user.getName());
+            try {
+                new GameJFrame(user.getName());
+            } catch (IOException ex) {
+                throw new RuntimeException(ex);
+            }
         } else if (s == register) {
             try {
                 new RegisterJFrame();
