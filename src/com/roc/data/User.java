@@ -3,6 +3,7 @@ package com.roc.data;
 public class User {
     private String name;
     private String password;
+    private int count = 3;
 
     public User() {
     }
@@ -16,6 +17,7 @@ public class User {
         String[] ss = line.split("[=&]");
         name = ss[1];
         password = ss[3];
+        count = Integer.parseInt(ss[5]);
     }
 
     public String getName() {
@@ -34,11 +36,20 @@ public class User {
         this.password = password;
     }
 
+    public int getCount() {
+        return count;
+    }
+
+    public void setCount(int count) {
+        this.count = count;
+    }
+
+    public void decrementCount() {
+        count--;
+    }
+
     @Override
     public String toString() {
-        return "User{" +
-                "name='" + name + '\'' +
-                ", password='" + password + '\'' +
-                '}';
+        return "username=" + name + "&password=" + password + "&count=" + count;
     }
 }

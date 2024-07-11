@@ -6,6 +6,7 @@ import com.roc.utils.IOUtils;
 import javax.swing.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -59,6 +60,19 @@ public class RegisterJFrame extends JFrame implements MouseListener {
                         包含至少一个特殊字符""");
                 return;
             }
+            if (contains(username.getText())) {
+                showDialog("用户名已经存在, 请重新输入!");
+                return;
+            }
+            userList.add(new User(username.getText(), password.getText()));
+            try {
+                IOUtils.writeLines(userList, "userinfo.txt");
+                showDialog("注册成功!");
+                setVisible(false);
+                new LoginJFrame();
+            } catch (IOException ex) {
+                throw new RuntimeException(ex);
+            }
         } else if (s == reset) {
             username.setText("");
             password.setText("");
@@ -92,6 +106,10 @@ public class RegisterJFrame extends JFrame implements MouseListener {
     @Override
     public void mouseExited(MouseEvent e) {
 
+    }
+
+    public boolean contains(String username) {
+        return userList.stream().anyMatch(u -> u.getName().equals(username));
     }
 
     private void initView() {

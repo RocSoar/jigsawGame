@@ -1,8 +1,6 @@
 package com.roc.utils;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,5 +13,31 @@ public class IOUtils {
             lines.add(line);
         br.close();
         return lines;
+    }
+
+    public static <T> void writeLines(List<T> list, String path) throws FileNotFoundException {
+        PrintWriter pw = new PrintWriter(path);
+        list.forEach(e -> pw.println(e.toString()));
+        pw.close();
+    }
+
+    public static void writeObject(Serializable obj, String path) throws IOException {
+        ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(path));
+        oos.writeObject(obj);
+        oos.close();
+    }
+
+    public static void writeObject(Serializable obj, File file) throws IOException {
+        ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(file));
+        oos.writeObject(obj);
+        oos.close();
+    }
+
+    @SuppressWarnings("unchecked")
+    public static <T> T readObject(File file) throws IOException, ClassNotFoundException {
+        ObjectInputStream ois = new ObjectInputStream(new FileInputStream(file));
+        Object o = ois.readObject();
+        ois.close();
+        return (T) o;
     }
 }

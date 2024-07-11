@@ -8,6 +8,7 @@ import javax.swing.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -127,29 +128,46 @@ public class LoginJFrame extends JFrame implements MouseListener {
             String un = username.getText();
             String pwd = new String(password.getPassword());
             String c = code.getText();
-            if (!rightCode.getText().equalsIgnoreCase(c)) {
+            String rightCodeText = rightCode.getText();
+            rightCode.setText(CodeUtils.generateCheckCode(5));
+            if (!rightCodeText.equalsIgnoreCase(c)) {
                 showDialogue("验证码错误!");
-                rightCode.setText(CodeUtils.generateCheckCode(5));
                 return;
             }
             if (un.isEmpty() || pwd.isEmpty()) {
                 showDialogue("用户名或者密码不能为空!");
-                rightCode.setText(CodeUtils.generateCheckCode(5));
                 return;
             }
             if (!contains(un)) {
                 showDialogue("用户名不存在!");
-                rightCode.setText(CodeUtils.generateCheckCode(5));
                 return;
             }
+
             User user = queryOne(un);
             if (!user.getPassword().equals(pwd)) {
-                showDialogue("密码错误!");
-                rightCode.setText(CodeUtils.generateCheckCode(5));
+                user.decrementCount();
+                try {
+                    IOUtils.writeLines(userList, "userinfo.txt");
+                } catch (FileNotFoundException ex) {
+                    throw new RuntimeException(ex);
+                }
+                String txt = user.getCount() <= 0 ?
+                        "你的账户已被锁定, 请联系管理员处理!" : "你还剩" + user.getCount() + "次机会!";
+                showDialogue("密码错误!" + txt);
                 return;
             }
+            if (user.getCount() <= 0) {
+                showDialogue("您的账号已被锁定! 请联系管理员处理!");
+                return;
+            }
+            user.setCount(3);
+            try {
+                IOUtils.writeLines(userList, "userinfo.txt");
+            } catch (FileNotFoundException ex) {
+                throw new RuntimeException(ex);
+            }
             setVisible(false);
-            new GameJFrame();
+            new GameJFrame(user.getName());
         } else if (s == register) {
             try {
                 new RegisterJFrame();
