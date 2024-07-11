@@ -5,7 +5,7 @@ import java.io.IOException;
 
 public class App {
     public static void main(String[] args) throws IOException {
-//        new LoginJFrame();
-        new GameJFrame("roc");
+        new LoginJFrame();
+//        new GameJFrame("roc");
     }
 }
